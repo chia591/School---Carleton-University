@@ -1,0 +1,10 @@
+COMP2404B
+Andy Chia - 101111058
+
+Files: main.cc, Makefile, Movie.cc, Movie.h, MovieGroup.cc, MovieGroup.h
+
+Purpose: to manage a library of movies and store them under categories filtered by year
+
+Compilation instructions
+    make
+    ./a1

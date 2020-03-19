@@ -1,0 +1,72 @@
+Andy Chia - 101111058
+
+Q2.a:
+select branch.branch_city
+from branch, loan
+where branch.branch_name = loan.branch_name and loan.amount > 50000;
+----------
+Q2.b:
+select depositor.ID
+from depositor, account
+where depositor.account_number = account.account_number and account.balance > 50000 and account.branch_name = "Nepean";
+----------
+Q2.c:
+select customer.customer_name
+from customer natural join ((borrower natural join loan) join (depositor natural join account) using(ID));
+where customer.amount > customer.balance;
+----------
+Q3.a:
+insert into course
+        values('COMP5118', 'Aces of Databases', 'Comp. Sci', 0);
+----------
+Q3.b:
+insert into section
+        values('COMP5118', 'A', 'Winter', 2020, null, null, null);
+----------
+Q3.c:
+insert into takes(ID, course_id, sec_id, semester, year, grade)
+        select ID, 'COMP5118', 'A', 'Winter', 2020, null)
+        from student
+        where dept_name = 'Comp. Sci";
+----------
+Q3.d:
+delete from takes
+where ID = '12345';
+----------
+Q3.e:
+select course_id, ID, count(*)
+from takes
+group by course_id, ID
+having count(*) > 1;
+----------
+Q3.f:
+select ID, name
+from instructor
+where ID = (select ID
+            from teaches natural join (select course_id, sec_id, semester, year
+                                       from section natural left join takes
+                                       where grade = 'A'))
+----------
+Q3.g:
+select ID, name
+from instructor
+where ID = (select ID
+            from teaches natural join (select course_id, sec_id, semester, year
+                                       from section natural left join takes
+                                       where grade = 'A'))
+----------
+Q3.h:
+select min(salary)
+from (select dept_name, max(salary)
+      from instructor
+      group by dept_name)
+----------
+Q4.a:
+select count(report_number)
+from accident natural join participated natural join person
+where name = 'Ahmed El-Roby'
+----------
+Q4.b:
+update participated
+set report_number = 'AR2020', damage_amount = 3000
+where  licence_plate = 'DB007'

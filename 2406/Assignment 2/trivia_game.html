@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <title>🎉Not So Good Trivia🎉</title>
+    <script src="script_trivia.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body onload="ONLOAD_trivia()">
+    <style>
+        .name
+        {
+        margin: 0 auto;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: right;
+        }
+    </style>
+    <div class="name" id="divName"></div>
+    <style>
+      .clsGame
+      {
+      margin: 0 auto;
+      margin-left: auto;
+      margin-right: auto;
+      text-align:center;
+      background-color: aquamarine;
+      }
+    </style>
+    <div class="clsGame">
+      <h1>🎉Not So Good Trivia🎉</h1></br>
+    </div>
+
+    <style>
+      .gamePage
+      {
+      margin: 0 auto;
+      margin-left: auto;
+      margin-right: auto;
+      text-align:center;
+      }
+    </style>
+    <div id="gamePage" class="gamePage">
+      <h4>Game Question Should be displayed here</h4>
+    </div>
+  </br>
+    <div id='playerList'>
+    </div>
+    
+    <style>
+      #playerList
+      {
+        width: 200px;
+        border: 1px solid red;
+        margin-right: 10px;
+        float: left;
+      }
+      #chat
+      {
+        width: 400px;
+        border: 1px solid red;
+        margin: 0 auto;
+        margin-left: auto;
+        margin-right: auto;
+        float: left;
+        align-self: auto;
+      }
+    </style>
+  </body>
+</html>

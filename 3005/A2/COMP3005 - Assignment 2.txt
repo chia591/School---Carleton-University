@@ -1,0 +1,22 @@
+Andy Chia - 101111058
+
+Q2.a:
+select branch.branch_city
+from branch, loan
+where branch.branch_name = loan.branch_name and loan.amount > 50000;
+----------
+Q2:
+select name
+from instructor natural left outer join teaches
+where course_id IS NULL
+----------
+Q3:
+select *
+from section inner join classroom using(building, room_number)
+----------
+Q4:
+create view tot_credits as
+select year, num_credits
+from 
+----------
+Q5:

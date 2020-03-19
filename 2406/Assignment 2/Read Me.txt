@@ -1,0 +1,207 @@
+Andy Chia - 101111058
+Note: This is also for me to understand my own code after working on it over the course of a week with exaustion. 
+
+server.js
+    Modules:
+        app = express
+        http = http
+        io = socket.io
+        ult = url
+        colors = colors
+    
+    Variables:
+        users = Json of all the users that have created an account on the server
+            Note: The user formats as followed:
+                .customId = created username
+                .userId = socket.io assigned id from the client the user is using
+                .privateId = personal ID (code), this can be randomly generated so that people cant acess the user's other account *feature still has to be inplemented*
+                .overallScore = score the account has over the livespam of the account
+                .currentScore = score for the current session
+        onlineUsers = Similar Json to users but only the online accounts
+        responses = for every round this is how many people has anwsered 
+            Note: this should always be kept 0 and only increments when a responce from a user is received
+        
+        test = The test grabbed by the opendb website (format json)
+        currentQuestion = The current question that the program is displaying, this is a question from "test"
+        step = This is to be used by the recursive function "round()", more indept explanation in Functions
+        t = where the "setTimeout()" is stored, this has to be acessable by any function to skip to the next question
+    
+    Functions:
+        colors.setTheme()
+            Mainly to orginize the console output visually but currently the console is all over the place so dont expect much
+        app.
+            get('/')
+                default, gets the html for the page where you enter your username
+                this could be a login page *feature still has to be inplemented*
+            get('/game?')
+                this returns the html file for the games page
+                the url also holds the username of the player
+                    This could use the .privateId for a profile of the user as some sort of ecryption *feature still has to be inplemented*
+            get('/game')
+                default, this returns the html file for the games page
+            get('/script_title.js')
+                grabs the JS file that belongs to the html page
+            get('/script_trivia.js')
+                grabs the JS file that belongs to the html page
+        io.on('connection')
+            socket.on('username')
+                Variables:
+                    newAccount = Just a toggle to see the incomming name is either new to the system or not
+                        true = creates new profile and send it back
+                        false = sends back existing profile
+                Description:
+                    TL:DR - first function called from the client, client sends its username, function process username, function sends related profile of username and starts the game if no one was online prior
+                    1. it goes throgh the "users" variable to find if there is a matching username. if found, sets "newAccount" to false
+                    2.
+                        a) if "newAccount" is true then it creates a new profile and adds it to both the "users" and "onlineUsers" with default values and assigned the username and the current socket.io id to its profile
+                        b) if "newAccount" is false then the profile is already in the system, it will then serch again for the profile and change the once null ".userId" to new socket.io id on the new client, ".currentScore" is also set to 0 and the profile is added on onlineUsers
+                    3. 
+                        a) if no one was online prior (this is checked by seeing if "test" is empty), the "getGame()" function is executed;
+                        b) if there is a currently running game, the user will receive the current question ("currentQuestion") via "io.emit('question')".
+            socket.on('disconnect')
+                Description:
+                    TL:DR - Finds the disconnected user via socket.io id then removes them from "onlineUsers", if no one is online anymore resets the server.
+                    1. Finds the user that disconnected with the socket.io id, then removes it from "onlineUsers"
+                    2. also clears the ".userId" on the profile located in "users"
+                    3. Resets the game by setting most variables to its default values and clearing all the timers with "clearTimeout()"
+            socket.on('user_send')
+                Description:
+                    TL:DR - returns the profile of the sender
+                    1. looks through "onlineUsers" with the socket.io id
+                    2. privatly sends back the JSON profile of the sender
+            socket.on('correct')
+                Variables:
+                    out = updated profile pulled from "users"
+                Description:
+                    TL:DR - Congragulations you got the right, your "overallScore" and "currentScore" have been incresed by 100, profile sent back (updated). also if everyone anwsered next question appears *ran into weird issues read below*
+                    1. finds the profile of the user on both "onlineUsers" and "users" and increments the "overallScore" and "currentScore" by 50
+                        *There was issues where incrementing the scores would happen two times even though checking the events with console.log() the function only runs once
+                    2. increments "responses" by 1
+                    3. if "responses" is the same as the length of "onlineUsers" then it will end the timer and run the next question, responses is set back to 0
+                    4. "out" is then sent back with socket.io ".emit('user_return')" for the client to have the updated score
+            socket.on('incorrect')
+                Description
+                    TL:DR - Woops you got it wrong, same as 'correct' but you lose points
+        getGame()
+            Description:
+                TL:DR - gets the questions, stores the questions, starts the game
+                1. Uses the 'request' module to grab the data from the opendb website.
+                2. "JSON.parse()" the data, the data is then stored into 'test' so it can be acessed from anywhere in the .js file.
+                3. starts the game with "startGame()"
+        startGame()
+            Description:
+                TL:DR - sets everyone's ".currentScore" to 0, responses is set to 0, step is set to 0, starts the recursive function "round()"
+                1. goes through every onlineUsers and sets their ".currentScore" to 0
+                2. variables are set to their default values so the game can properly restart
+                3. executes "round()" (details in "round()")
+        timeoutHandles()
+            Description:
+                TL:DR - recursive function that has a built in "setTimeout()" that will execute itself every *** miliseconds displaying the question to all the clients connected.
+                1. Aside from it being a recursive function (i am very proud)
+                2. Check the "step" variable to see what step is it suppose to do
+                    a) While the step is from 0 to the length of "test" (the number of questions), the it will modify the question to indicate what question # and then it (io.emit('question')) to every connected user also increments "step" by 1
+                    b) When step reaches the same number as the length of "test", there are no more question and it has to display the winner(s). this sends a "io.emit('roundEnd')" with a modified string containing the winner(s) name(s)
+                    c) after this, it will create a new game by calling "getGame()" this grabs a new test from the opendb website and run through the last 3 functions again
+                3. the entire function runs only when there are people listed on the "onlineUsers" if no one is present the code just stops.
+
+script_title.js
+    Functions:
+        ONLOAD_name()
+            Related html file launches this function on launch, just adds an ".addEventListener("click")" to the only button to activate "btnConfirm()"
+        btnConfirm()
+            TL:DR - redirects to the game
+            1. On the press of the button this function is executed
+            2. it checks the value that the user has inputed in the text box
+            3.
+                a) if the text box is empty it will do nothing
+                b) if the text box contains something, the user is not redirected to a predetermined url containing the input that was in the textbox
+
+script_trivia.js
+    Variables:
+        user = this is the profile stored in the js file that belongs to the individual user
+        storedQuestion = this is the question received from the server, there are multiple uses for this.
+        selectedAnwser = this is the anwser selected by the user from the radio buttons that are put up
+        socket = took me a while to figure this out but instead of doing ```let socket = io()``` why not put the variable globaly for ease of acess... (yes i was stuck here)
+    Functions:
+        ONLOAD_trivia()
+            Variables:
+                id = this is grabbed from the url following the '=', little janky but can be easily improved for more secure and complex urls (but i dont need to in this case)
+            Description:
+                TL:DR - this is where contains most of the socket.io stuff + disecting url and is executed on load of its html
+                1) The current url is obtained and the id is striped from the url, if no id is found then it will use a guest id
+                2) initialises the connection with socket.io to the server
+            Functions:
+                socket.on('connect')
+                    Description:
+                        TL:DR - send info to create / find a profile then receive it later in the code
+                        1) sends the 'id' from the url using "socket.emit('username')"
+                        2) ask for the profile of the user with "socket.emit('user_send')", the reply is the "socket.on('user_return')" (read below)
+                socket.on('user_return')
+                    Description:
+                        TL:DR - updates the top right of the html to display the player's name with their score
+                        1) stores the data received inside the 'user' variable
+                        2) created the div object to display on the topright of the page
+                        3) removes anything and everything in the div located at the top right
+                        4) adds the created object to the div located at the top right
+                socket.on('question')
+                    Description:
+                        TL:DR - takes the received question and displays it on the page, also stores it.
+                        1) stores the data received from the server into 'storedQuestion'
+                        2) executes "render()" with the data as an input (more on "render()" at "render()")
+                socket.on('roundEnd')
+                    Variables:
+                        winnerNames = Just a default string that gets added onto until it can be printed out
+                    Description:
+                        TL:DR - created the end screen message showing who won the game
+                        1) creates a variable ("winnerNames") with its base value
+                        2) adds onto this variable with the names given from the server
+                        3) cleans off the question so that the new variable can be inserted with a nice style.
+        confirm()
+            Variables:
+                Childrens = grabes the class named "questions" in html, this is very important to modify the html and also very confusing.
+            Description:
+                TL:DR - This functions is activated when one of the radio buttons is pressed, it will then reply back to the server if the user selected the correct anwser or not
+                1) A lot of navigation, just trust me it works.
+                2) Since this is activated when one of the buttons is selected, the radio button is removed and the selected anwser is highlighted.
+                3) send to the server a "socket.emit('incorrect')" or a "socket.emit('correct')". it is then given a reply by the server
+        render()
+            Variables:
+                questionArea = this is where in the html where the question will be displayed.
+                question, title, anwsers = these are just children that will get added into the "questionArea"
+            Description:
+                TL:DR - updates the username with the score, updates the question displayed for the new one
+                1) calls "socket.emit('user_send')" to update the username
+                2) clears the page to put in the new question
+                3) from here on its very similar to Assigment 1 so just a TL:DR will be provided
+                    TL:DR - creates a class containing the question, and all the anwsers with their own radio button. There is a lot of the use of the next function (function makeRadioButton())
+        makeRadioButton()
+            Variables:
+                name, value, text = self explanatory really, its just the values of the radio button when creating them
+            Description:
+                stitches up a radio button with text and returns it
+        shuffle()
+            Variables:
+                array = the inputed array
+            Description:
+                sorts the array with a random number to mix it up.
+
+Add-On features:
+4) 30 second internal timer for all the players to anwser, this is not displayed on the client its server only
+
+Updates:
+    server.js
+        you might see a bunch of randomly placed "io.emit('players', onlineUsers);".
+            This is intentional, its to update the players list with their score every time a player does something;
+    script_trivia.js 
+        socket.on('players')
+            Description:
+                takes the received list of online players and executes "renderPlayerList()" with it as an input
+        renderPlayerList()
+            Description:
+                TL:DR - Similar to render but its to update the html object "playerList"
+                1) clears the list so that it can be updated
+                2) goes through the input and updates the list
+
+[to run the code]
+cmd -> node server.js
+chrome -> localhost:3000

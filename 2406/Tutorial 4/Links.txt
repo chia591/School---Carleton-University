@@ -1,0 +1,5 @@
+https://socket.io/get-started/chat
+https://expressjs.com/en/4x/api.html#res.send
+https://www.w3schools.com/xml/xml_http.asp
+https://www.w3schools.com/js/js_ajax_http_send.asp
+met win set intervals
