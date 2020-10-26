@@ -1,0 +1,31 @@
+Andy Chia - 101111058
+COMP3000A - Assignment 1 - Oct 2, 2020
+
+Part 1:
+
+1.	grep -o -i 'printf' -m 1 --binary-files=text /lib/x86_64-linux-gnu/libc.so.6
+	Grep serches for the keywoard "printf" in the binary file libc.so.6 after converting it. then gets singled out with -o
+		
+2.	since with vfork() the parent and child share the same address space, this allows it to have more address spaces
+	only one process runs at once, this being the child.
+	all changes to address spaces are visible to the parent since its a shared space
+	
+3.	malloc() will always allocate memory on the heap, when in need of more memory, the library will ask the os using sbrk syscall
+
+Part 2
+
+1.	syscalls: 	wait() calls wait4()
+				fprintf() calls write() to write in the file descriptor 
+				printf() calls write() to write in the file descriptor 
+				fgets() calls read() to read from the file descriptor
+
+2.	The reason why interactive programs are unresponsive when being run in the background is because while the process may be running in the background, the fork is waiting on it to end/quit causing it to not be responsive since we are still focused on the parents. We never actually have acess to the child and can only see its display.
+
+3. 	run:
+	wc -l <myfile.txt
+
+4. 	run:
+	export TEST='any char'
+	./a.out
+	
+5.

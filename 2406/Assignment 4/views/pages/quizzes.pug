@@ -1,0 +1,6 @@
+html
+
+body
+    each quizz in quizzes
+        a(herf="/questions/:qID" + quizz._id) #{quizz.creator} #{title}
+        br

@@ -1,0 +1,27 @@
+Andy Chia - 101111058
+COMP3000A - Tutorial 3 - Sep 25, 2020
+
+1.	compiled
+
+2.	In the input of the program it says what process is running in the background, where the output is the exiting
+	when running ls in the background it runs fine but when trying to run bc it not responsive and has to be killed using another terminal
+	similarly, running top in the background it brings it directly to the forground
+	it is making a fork of the program and running it in the background with pid.
+	
+3.	you can recover by opening another ssh terminal and killing it with "killall -9 'program name'"
+	ps aux | grep "program name" -> to show the list of active processes with the program name
+
+4.	using ">" *do not put a space example: "ls >ls.out"*
+
+5.	(pid == -1) means that there is no child process to wait for. so it returns a -1 *aka failed*
+
+6.	puts(fn);
+	in the function find_binary
+
+7.	"killall -SIGUSR1 3000shell"
+	adding -SIGUSR1 as a signal to the code and an error at the end
+		if (the_signal != SIGCHLD){fprintf(stderr, "Ouch!");} 
+	 
+8.	after removing it, it exited the shell and does not restart
+
+9.	the interface functionality does not change but the coding functionality changes, 

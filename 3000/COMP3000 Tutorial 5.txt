@@ -1,0 +1,57 @@
+Andy Chia - 101111058
+COMP3000A - Tutorial 5 - Oct 9, 2020
+
+Part A:
+
+1.	Text File: 		inode, length, a count
+	Directory: 		inode, length
+	Symbolic Link: 	Same as text file with same values since its a link of the tested file
+		*ln -s "source file" "linking file"
+	Device File: 	inode, length (0)
+		*mknod <name> <type of device c:- character b:- block device etc> <major> <minor>
+		*mknod test_device c 89 1
+
+2.	identical to stat but when taking in a symbolic link, it returns the information about the symbolic link not the file.
+
+3.	i tried for an hour and couldent get it working, readlink() should return the number of bytes placed in the buffer, and will truncate the content.
+	Notes: define some buffer size in the beginning, around line 15, enter the conditios with the static buffer and readlink(2)
+		https://pubs.opengroup.org/onlinepubs/007908799/xsh/sysstat.h.html
+		
+		
+Part B:
+
+1.	it shows the inodes of files.
+
+2.	the file foo has a logical size of 268435456 bytes. and the physical size is 268439552.
+		*ls -s --block-size=1 foo
+	
+	foo2 logical 268435456 / physical 8388608 The physical size is significantly smaller than the logical size
+	
+3.	foo now consumes less phisical size but the same logical size.
+	foo2 consumes more phisical space but the same logical size.
+	
+4.	fsck.ext4 -p foo
+	*man 8 fsck
+	*man 5 fs
+	
+5.	no i do not see the file anymore
+
+6.	/dev/loop0 is mounted to /mnt
+	it is a virtual device to make files accessible as a block device. 
+
+7.	yes it is back to how it was before
+
+8.	-rw-rw-r-- 1 student student 268435456 Oct  9 12:13 foo
+	-rw-rw-r-- 1 student student 268435456 Oct  9 12:26 foo
+	it prevents foo from being truncated, prevent it from shrinking or extending the file to a specific size
+	
+9.	
+	```
+		NTFS signature is missing.
+		Failed to mount '/dev/loop0': Invalid argument
+		The device '/dev/loop0' doesn't seem to have a valid NTFS.
+		Maybe the wrong device is used? Or the whole disk instead of a
+		partition (e.g. /dev/sda, not /dev/sda1)? Or the other way around?
+	```
+	
+10.	by running mkfs.ext4 again after running dd without conv=notrunc

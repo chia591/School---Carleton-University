@@ -1,0 +1,6 @@
+html
+    
+body
+    each card in responseCards
+        a(href="/cards/" + card.id) #{card.name}
+        br

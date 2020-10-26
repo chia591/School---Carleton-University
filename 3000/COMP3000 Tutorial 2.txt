@@ -1,0 +1,43 @@
+Andy Chia - 101111058
+COMP3000A - Tutorial 2 - Sep 18, 2020
+
+1.	The size of hello.static is significantly bigger than it being compiled dynamically. same with syscall-hello.c
+		static: 	871696
+		dynamic:	16688
+
+2.	the one created dinamicaly has more system calls incomparason to the static one
+
+3.	static does not generate any library calls but when calling it dynamically it tries to find a file
+
+4.	by adding the directory of where hello-lib.c is located to LD_LIBRARY_PATH so that i can be acessed.
+
+5. 	Here is the full list of dependencies:
+		linux-vdso.so.1 (0x00007ffc9a3be000)
+        libprocps.so.8 => /lib/x86_64-linux-gnu/libprocps.so.8 (0x00007f395424a000)
+        libtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007f395421a000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f3954028000)
+        libsystemd.so.0 => /lib/x86_64-linux-gnu/libsystemd.so.0 (0x00007f3953f7b000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f3953f75000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f39542ca000)
+        librt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007f3953f6a000)
+        liblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007f3953f41000)
+        liblz4.so.1 => /lib/x86_64-linux-gnu/liblz4.so.1 (0x00007f3953f20000)
+        libgcrypt.so.20 => /lib/x86_64-linux-gnu/libgcrypt.so.20 (0x00007f3953e02000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f3953ddf000)
+        libgpg-error.so.0 => /lib/x86_64-linux-gnu/libgpg-error.so.0 (0x00007f3953dbc000)
+
+6. 	When it receives those signals, top closes
+	the system calls that it receives is
+		close(3)
+		close(1)
+		close(2)
+		exit_group(0)
+		+++ exited with 0 +++
+		
+7.	Because its a shared address space, new processes are created and with that it allocates space to difrent processes.
+
+8.	Both the stack and the heap is stored on the RAM of the computer, the code is stored on the hardisk and the global varaibles are stored in the cash
+
+9.	after changing the malloc, it allocates more space to sbrk to use depending on the value of malloc
+
+10.	yes things are where i expect them to be, there is more memmory allocated 

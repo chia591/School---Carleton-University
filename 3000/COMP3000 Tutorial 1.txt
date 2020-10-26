@@ -1,0 +1,44 @@
+Andy Chia - 101111058
+COMP3000A - Tutorial 1 - Sep 11, 2020
+
+1. 	a) `lsb_release -a` -> Ubuntu 20.04.1 LTS
+	b) `echo $0` -> -zsh (i changed it, if i want to acess bash again i can enter the command `bash`)
+	c) `htop` -> shows the equivelant of task manager on windows
+	
+2.	opens up the manual for a certain command
+
+3.	using `type [command]` it will tell us if it is builtin or external, three external commands: cat, vim and nano
+
+4.	you can find documentation online, i used https://opensource.com/article/17/6/set-path-linux
+	to add a directory to the path you use the `export path=$PATH:/the/directory/` command
+	to add the command permenantly, the above command has to be added to the configuration file in the shell, located at ~/.bashrc for bash
+	
+5.	using the command `ls -l /path/of/command/that/is/external/` it will return something similar to this:
+		"-rwxr-xr-x 1 root root 43416 Sep  5  2019 /usr/bin/cat"
+	to who the owner of the file is what follows after the 1 
+		in this case: root
+	and the group is right after that
+		also: root
+
+6.	where permissions are seperated by user, group and others.
+		r = read
+		w = write
+		x = execute
+
+7.	"/etc/passwd"	-rw-r--r-- 1 root root 2226 Sep 10 10:34 /etc/passwd
+		- owner and group is both root, permissions is only read and write
+		- User account information
+		
+	"/etc/shadow"	-rw-r----- 1 root shadow 1359 Sep 10 10:38 /etc/shadow
+		- owner is root but the group is shadow, permissions is only to read and write
+		- Secure user account information
+		
+8.	Allows the user to enter the directory and acess the files and directories inside of it.
+
+9.	Using -l allows you to see permission bits
+	Using -a allows you to see all files including hidden files
+	to make a file hidden, adding a `.` to the start of its name hides it
+	
+10. - it shows processes that have been made and when its completed.
+	- you cant use up and down arrow to return to previous commands
+	- i cant find external commands when doing `type cat`

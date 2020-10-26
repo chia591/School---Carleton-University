@@ -1,0 +1,28 @@
+html
+    head
+        title #{responseCard.name} #{responseCard.id}
+        if responseCard.mechanics
+            - var mechanics = responseCard.mechanics
+            h2 #{mechanics}
+body
+
+    if responseCard.rarity
+        - var rarity
+        case responseCard.rarity.toUpperCase()
+            when "FREE"
+                - rarity = "*"
+            when "COMMON"
+                - rarity = "**"
+            when "RARE"
+                - rarity = "***"
+            when "EPIC"
+                - rarity = "****"
+            when "LEGENDARY"
+                - rarity = "*****"
+    p.
+        [name] : #{responseCard.name} #{rarity} <br>
+        [id] : #{responseCard.id} <br> <br>
+        - [cardClass] : #[a(href="/cards?class=" + responseCard.cardClass) #{responseCard.cardClass}] <br>
+        - [set]: #[a(href="/cards?set=" + responseCard.set) #{responseCard.set}] <br>
+        - [type]: #[a(href="/cards?type=" + responseCard.type) #{responseCard.type}] <br>
+        - [artist]: #[a(href="/cards?artist=" + responseCard.artist) #{responseCard.artist}] <br>

@@ -1,0 +1,32 @@
+Andy Chia - 101111058
+COMP3000A - Tutorial 4 - Oct 2, 2020
+
+1.	Compiled using the steps, able to log into properly without needing a password: "someuser@comp3000:~$"
+
+2.	there is a line of code that that disables syntax highlighting
+	clearenv();
+
+3.	fprintf the pw_entry,
+	It should print X
+	* i really cant get get it to print the struct %s does not print it.
+	
+4.	when running as a regular user, all of the ids are 1000.
+	When running as the super user, all ids are 0.
+	When running as g+s, egid is 0.
+		*the acess rights are with the root
+		
+5.	when switching the order of the uid and gid, the euid is not set to 0
+
+6. i tried looking up but wasnt able to
+
+7.	yes but you will have to modify the shell, and add the shell path to /etc/shells
+
+8.	yes, it cant become instead an arbiraty program since it will have a use case of giving acess the user to loging.
+
+9.	Not each of the environment variables are important since it will still run normally without most of them.
+
+10.	after changing to envp, i noticed that there is color. also there is an error when tryign to acess files:
+	"Unable to create directory /home/student/.local/share/nano/: Permission denied
+	It is required for saving/loading search history or cursor positions."
+
+11.	setuid(), setgid(), they take in uid and gid repsectively as an input. 

@@ -1,0 +1,13 @@
+Andy Chia - 101111058 - COMP2404 Assignment 3
+
+Purpose: A system that stores books in a library with a cheke in and check out system
+
+Files: Book.cc Book.h Control.cc Control.h Library.cc Library.h List.cc List.h Logger.cc Logger.h main.cc MakeFile View.cc View.h "Assignment 3 - COMP2404.png"
+
+How to run:
+    Make
+    ./a3
+
+Notes: There is currently a problem with the del(b->getId()) functions called in CheckOutLogger::update(Book* b), i have tried pinpointing the problem by trying to isolate the function but
+        Sadly the problem is between b->getId() and the del() function, since del does not get called at all and getId() works fine. But in CheckInLogger::update(Book* b) the del() appears
+        to work perfectly fine.

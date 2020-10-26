@@ -1,0 +1,13 @@
+html
+    head
+        title Created User Accounts
+body
+    h3 Username (Password)
+    for user in users
+        div(id=user._id, class="user_div")
+            a(href="/users/"+user._id) !{user.username}
+            |  (!{user.password})
+            br
+            p Total Quizzes: !{user.total_quizzes}
+            p Total Score: !{user.total_score}
+            br

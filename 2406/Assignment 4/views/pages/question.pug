@@ -1,0 +1,11 @@
+html
+    head
+        title #{x.question} #{x._id}
+body
+    p.
+        [Question] : #{x.question} <br>
+        - [Difficulty] : #{x.difficulty} <br>
+        - [Category] : #{x.category} <br>
+        - [Questions] <br>
+         * #{x.correct_answer} <br>
+         - #{x.incorrect_answers} <br>
